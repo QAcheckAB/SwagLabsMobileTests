@@ -1,0 +1,17 @@
+{
+  "app": "",
+  "device": "iOS",
+  "platformName": "iOS",
+  "browserName": "Chrome",
+  "appiumVersion": "2.11.3",
+  "deviceOrientation": "portrait",
+  "platformVersion": "17",
+  "deviceName": "iPhone .*",
+  "remote": "http://localhost:4723",
+  "xcodeOrgId": "",
+  "xcodeSigningId": "iPhone Developer",
+  "updatedWDABundleId": "",
+  "bundleId":"",
+  "automationName": "XCUITest",
+  "udid": ""
+}

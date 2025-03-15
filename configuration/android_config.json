@@ -1,0 +1,15 @@
+{
+  "app": "Android.SauceLabs.Mobile.Sample.app.2.7.1.apk",
+  "device": "Android",
+  "platformName": "Android",
+  "browserName": "Chrome",
+  "appiumVersion": "2.11.3",
+  "deviceOrientation": "portrait",
+  "deviceName": ".*",
+  "platformVersion": "14",
+  "remote": "http://localhost:4723",
+  "appPackage": "com.swaglabsmobileapp",
+  "appActivity": "com.swaglabsmobileapp.SplashActivity",
+  "unicodeKeyboard": true,
+  "resetKeyboard": true
+}
