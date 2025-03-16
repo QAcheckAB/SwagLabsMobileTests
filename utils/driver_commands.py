@@ -7,6 +7,7 @@ from appium.webdriver.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from appium import webdriver
+
 from utils import ELEMENT
 
 
@@ -50,17 +51,18 @@ class DriverCommands:
         element.click()
         log.debug('Element clicked')
 
-    def fill_in(self, selector: ELEMENT, value: str) -> None:
-        """Find element and enter text to the field
-
-            :param selector: touple (eg. By.ID, 'element/id')
-            :param value: text
+    def type_text(self, selector: ELEMENT, value: str) -> None:
+        """
+        finds element, clear and enter text to the field
+        :param selector: tuple (eg. By.ID, 'element/id') or WebElement
+        :param value: str, text to enter; if value is an empty string '', the input will only be
+            cleared
         """
         element = self.find_element(selector)
         element.clear()
         if len(value) > 0:
             element.send_keys(value)
-        log.debug('Input field filled')
+        log.info(f'"{value}" text send to input field. (ID: {element.id})')
 
     def get_text_from_element(self, element: ELEMENT) -> str:
         """Find element and get text from it.

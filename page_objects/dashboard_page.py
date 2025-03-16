@@ -4,8 +4,6 @@ from appium.webdriver import WebElement
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
 from typing import Literal, List
-from utils import ELEMENT
-
 from utils.driver_commands import DriverCommands
 from utils.swipe import Swipe
 from utils.wait_commands import WaitCommands
