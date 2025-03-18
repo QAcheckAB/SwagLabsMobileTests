@@ -26,9 +26,9 @@ class BaseTest(unittest.TestCase):
     coloredlogs.install()
     ROOT_PATH: str = os.path.abspath(
         os.path.dirname(os.path.dirname(__file__)))
-    CONFIG: dict = load_config_from_json("android_config.json")
-    APP_DIRECTORY: str = os.path.join(ROOT_PATH, 'test_apps')
-    PLATFORM: str = CONFIG['platformName'].lower()
+    CONFIG: dict = load_config_from_json(os.getenv("CONFIG_FILE", "android_config.json"))
+    APP_DIRECTORY: str = os.getenv("APP_DIRECTORY", os.path.join(ROOT_PATH, 'test_apps'))
+    PLATFORM: str = os.getenv("PLATFORM", CONFIG['platformName'].lower())
     driver: webdriver = None
     ANDROID = 'android'
     IOS = 'ios'

@@ -1,3 +1,5 @@
+import os
+
 import allure
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
@@ -86,7 +88,7 @@ class LoginPage(DriverCommands):
     def log_in(self, user:UserType) -> None:
         user_data: dict = load_config_from_json("users.json")
         self.type_text(self.SELECTORS['USERNAME'][self.platform], user_data[user]["login"])
-        self.type_text(self.SELECTORS['PASSWORD'][self.platform], user_data[user]["password"])
+        self.type_text(self.SELECTORS['PASSWORD'][self.platform], (os.getenv("PASSWORD", user_data[user]["password"])))
         self.click_element( self.SELECTORS['LOGIN_BUTTON'][self.platform])
 
     @allure.step("Get error message")
