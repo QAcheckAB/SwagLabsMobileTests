@@ -1,5 +1,14 @@
 {
-  "standard": "standard_user",
-  "locked": "locked_out_user",
-  "problem": "problem_user"
+  "standard": {
+    "login": "standard_user",
+    "password": ""
+  },
+  "locked": {
+    "login": "locked_out_user",
+    "password": ""
+  },
+  "problem": {
+    "login": "problem_user",
+    "password": ""
+  }
 }

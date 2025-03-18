@@ -28,6 +28,11 @@ class CheckoutOverviewPage(DriverCommands):
             "android": (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().description("test-Price").childSelector(new UiSelector().className("android.widget.TextView").instance(0))'),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
+            "PRODUCT_QUANTITY": {
+        "android": (AppiumBy.ANDROID_UIAUTOMATOR,
+                    'new UiSelector().description("test-Amount").childSelector(new UiSelector().className("android.widget.TextView").instance(0))'),
+        "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
+    },
         "ITEM_TOTAL":{
             "android": (AppiumBy.ANDROID_UIAUTOMATOR, "new UiSelector().textContains(\"Item total: $\")"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
@@ -86,12 +91,20 @@ class CheckoutOverviewPage(DriverCommands):
     @allure.step("Get product price")
     def get_product_price(self, product_index:int) -> str:
         product_price_selector = self.SELECTORS['PRODUCT_PRICE'][self.platform]
-        return self.find_child_element_in_parent_element(self.get_product(product_index),
-                                                         product_price_selector).text.rstrip()
+        return self.find_child_element_in_parent_element(self.get_product(product_index), product_price_selector).text.rstrip()
 
     @allure.step("Assert product price")
     def assert_product_price(self, product_index:int, expected_price: str) -> None:
         assert self.get_product_price(product_index) == expected_price, f"Incorrect product price, expected {expected_price} but got {self.get_product_price(product_index)}"
+
+    @allure.step("Get product quantity")
+    def get_product_quantity(self, product_index:int) -> str:
+        product_quantity_selector = self.SELECTORS['PRODUCT_QUANTITY'][self.platform]
+        return self.find_child_element_in_parent_element(self.get_product(product_index), product_quantity_selector).text.rstrip()
+
+    @allure.step("Assert product quantity")
+    def assert_product_quantity(self, product_index:int, expected_quantity: str) -> None:
+        assert self.get_product_quantity(product_index) == expected_quantity, f"Incorrect product price, expected {expected_quantity} but got {self.get_product_price(product_index)}"
 
     @allure.step("Click finish button")
     def click_finish_button(self) -> None:
@@ -121,3 +134,11 @@ class CheckoutOverviewPage(DriverCommands):
         total_value = self.get_text_from_element(total_selector)
         assert total_value == f"Total: ${expected_value}", f"Incorrect total value, expected {expected_value} but got {total_value}"
 
+    def assert_checkout_overview_page(self, products_amount:int, product_index: int, product_name:str, product_price: str, product_quantity: str, tax_value:str, total_price:str):
+        self.assert_amount_of_items_on_overview(products_amount)
+        self.assert_product_name(product_index, product_name)
+        self.assert_product_price(product_index, product_price)
+        self.assert_product_quantity(product_index, product_quantity)
+        self.assert_item_total_value(product_price)
+        self.assert_tax_value(str(tax_value))
+        self.assert_total_value(str(total_price))
