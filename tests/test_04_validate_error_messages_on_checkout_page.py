@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-import random
-from typing import re
-
 import allure
-
-from helper_methods.value_formatting import format_price_value_to_float, round_value_to_two_decimal_places, format_value_to_two_decimal_places
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
@@ -43,15 +37,6 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
 
     def setUp(self):
         BaseTest().setUp()
-        # self.login_page.wait_for_page_loaded()
-        # self.login_page.select_user_type("standard")
-        # self.login_page.click_login_button()
-        # self.dashboard_page.wait_for_page_loaded()
-        # self.dashboard_page.add_product_to_cart(0)
-        # self.dashboard_page.click_cart_button()
-        # self.cart_details_page.wait_for_page_loaded()
-        # self.cart_details_page.click_checkout_button()
-        # self.checkout_page.wait_for_page_loaded()
 
     @allure.title("test 01 - Try to checkout without providing any data")
     def test_01_checkout_without_data(self):
@@ -60,7 +45,10 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
 
     @allure.title("test 02 - Try to checkout only with first name")
     def test_02_checkout_only_with_first_name(self):
-        self.checkout_page.fill_in_checkout_info_and_continue(last_name_value="", postal_code_value="")
+        self.checkout_page.fill_in_checkout_info_and_continue(
+            last_name_value="",
+            postal_code_value=""
+        )
         self.checkout_page.validate_error_message(self.LAST_NAME_ERROR_MESSAGE)
 
     @allure.title("test 03 - Try to checkout with first and last name")

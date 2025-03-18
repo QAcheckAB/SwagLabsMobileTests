@@ -34,18 +34,19 @@ class CheckCartAfterChangesTests(BaseTest):
     @allure.title("test 01 - Making order - adding product from dashboard to cart - happy path")
     def test_01_check_cart_after_removing_some_products(self):
         products_amount = 3
-        product_quantity = str(1)
+        product_amount_after_first_removal = 2
+        product_amount_after_second_removal = 1
+        product_quantity = "1"
         self.login_page.wait_for_page_loaded()
         self.login_page.select_user_type("standard")
         self.login_page.click_login_button()
         self.dashboard_page.wait_for_page_loaded()
         self.dashboard_page.switch_view()
+
         first_product_name= self.dashboard_page.get_product_name(0)
-        first_product_price = self.dashboard_page.get_product_price(0)
         second_product_name= self.dashboard_page.get_product_name(1)
         second_product_price = self.dashboard_page.get_product_price(1)
-        third_product_name= self.dashboard_page.get_product_name(2)
-        third_product_price = self.dashboard_page.get_product_price(2)
+
         self.dashboard_page.add_product_to_cart(0)
         self.dashboard_page.add_product_to_cart(1)
         self.dashboard_page.add_product_to_cart(2)
@@ -54,18 +55,23 @@ class CheckCartAfterChangesTests(BaseTest):
         self.dashboard_page.check_if_add_cart_button_visible_on_product_item(2)
         self.dashboard_page.check_if_remove_button_visible_on_product_item(0)
         self.dashboard_page.check_if_remove_button_visible_on_product_item(1)
-        self.dashboard_page.check_cart_button_label(f"{2}")
+        self.dashboard_page.check_cart_button_label(f"{product_amount_after_first_removal}")
         self.dashboard_page.click_cart_button()
         self.cart_details_page.wait_for_page_loaded()
-        self.cart_details_page.assert_amount_of_items_in_cart(2)
+        self.cart_details_page.assert_amount_of_items_in_cart(product_amount_after_first_removal)
         self.cart_details_page.assert_product_name(0, first_product_name)
-        self.cart_details_page.assert_product_quantity(0, "1")
+        self.cart_details_page.assert_product_quantity(0, product_quantity)
         self.cart_details_page.assert_product_name(1, second_product_name)
-        self.cart_details_page.assert_product_quantity(1, "1")
+        self.cart_details_page.assert_product_quantity(1, product_quantity)
         self.cart_details_page.remove_product_from_cart(0)
-        self.dashboard_page.check_cart_button_label("1")
-        self.cart_details_page.assert_amount_of_items_in_cart(1)
-        self.cart_details_page.assert_cart_details_page( 0, second_product_name, second_product_price, "1")
+        self.dashboard_page.check_cart_button_label(f"{product_amount_after_second_removal}")
+        self.cart_details_page.assert_amount_of_items_in_cart(product_amount_after_second_removal)
+        self.cart_details_page.assert_cart_details_page(
+            0,
+            second_product_name,
+            second_product_price,
+            product_quantity
+        )
 
 
 

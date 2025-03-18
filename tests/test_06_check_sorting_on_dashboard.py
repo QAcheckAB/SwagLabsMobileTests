@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-import random
-from typing import re
-
 import allure
-
-from helper_methods.value_formatting import format_price_value_to_float, \
-    format_value_to_two_decimal_places, round_value_to_two_decimal_places
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
