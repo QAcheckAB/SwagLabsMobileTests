@@ -7,6 +7,7 @@ from page_objects.checkout_overview_page import CheckoutOverviewPage
 from page_objects.checkout_page import CheckoutPage
 from page_objects.dashboard_page import DashboardPage
 from page_objects.login_page import LoginPage
+from page_objects.nav_bar import NavBar
 from tests.baseTest import BaseTest, safe_run
 
 
@@ -22,6 +23,7 @@ class MakingOrderFromDashboardTests(BaseTest):
         cls.checkout_page = CheckoutPage(cls.driver, cls.PLATFORM)
         cls.checkout_overview_page = CheckoutOverviewPage(cls.driver, cls.PLATFORM)
         cls.checkout_complete_page = CheckoutCompletePage(cls.driver, cls.PLATFORM)
+        cls.nav_bar = NavBar(cls.driver, cls.PLATFORM)
 
     def setUp(self):
         BaseTest().setUp()
@@ -45,11 +47,11 @@ class MakingOrderFromDashboardTests(BaseTest):
             format_price_value_to_float(product_price) + float(tax_value))
         )
         self.dashboard_page.add_product_to_cart(0)
-        self.dashboard_page.check_cart_button_label(f"{products_amount}")
+        self.nav_bar.check_cart_button_label(f"{products_amount}")
         self.dashboard_page.check_if_remove_button_visible_on_product_item(0)
-        self.dashboard_page.click_cart_button()
+        self.nav_bar.click_cart_button()
         self.cart_details_page.wait_for_page_loaded()
-        self.cart_details_page.assert_amount_of_items_in_cart(products_amount)
+        self.cart_details_page.assert_amount_of_products_in_cart(products_amount)
         self.cart_details_page.assert_cart_details_page(
             0,
             product_name,

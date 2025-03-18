@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 import allure
 from appium.webdriver import WebElement
 from appium.webdriver.common.appiumby import AppiumBy
@@ -26,10 +25,6 @@ class CartDetailsPage(DriverCommands):
         },
         "CHECKOUT_BUTTON": {
             "android": (AppiumBy.ACCESSIBILITY_ID, "test-CHECKOUT"),
-            "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
-        },
-        "PRODUCT_DESCRIPTION": {
-            "android": (AppiumBy.ACCESSIBILITY_ID, "test-Description"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
         "PRODUCT_TEXT": {
@@ -62,23 +57,24 @@ class CartDetailsPage(DriverCommands):
     def wait_for_page_loaded(self) -> None:
         self.wait.wait_for_element_visibility(self.SELECTORS['CART_CONTENT'][self.platform])
 
-    @allure.step("Get all items in cart")
-    def get_items_in_cart(self) -> List[WebElement]:
+    @allure.step("Get all products in cart")
+    def get_products_in_cart(self) -> List[WebElement]:
         cart_id = self.SELECTORS['CART_CONTENT'][self.platform]
         items_id = self.SELECTORS['CART_ITEMS'][self.platform]
         return self.find_all_child_elements_in_parent_element(cart_id, items_id)
 
-    @allure.step("Get all items in cart")
-    def get_amount_of_items_in_cart(self) -> int:
-        return len(self.get_items_in_cart())
+    @allure.step("Get amount of products in cart")
+    def get_amount_of_products_in_cart(self) -> int:
+        return len(self.get_products_in_cart())
 
-    @allure.step("Assert amount of items in cart")
-    def assert_amount_of_items_in_cart(self, expected_amount: int) -> None:
-        assert self.get_amount_of_items_in_cart() == expected_amount, f"Amount of items in cart is incorrect, expected {expected_amount} but got {self.get_amount_of_items_in_cart()}"
+    @allure.step("Assert amount of products in cart")
+    def assert_amount_of_products_in_cart(self, expected_amount: int) -> None:
+        products_amount = self.get_amount_of_products_in_cart()
+        assert products_amount == expected_amount, f"Amount of products in cart is incorrect, expected {expected_amount} but got {products_amount}"
 
-    @allure.step("Get product")
+    @allure.step("Get product based on index")
     def get_product(self, product_index) -> WebElement:
-        return self.get_items_in_cart()[product_index]
+        return self.get_products_in_cart()[product_index]
 
     @allure.step("Get product name based on index")
     def get_product_name(self, product_index: int) -> str:
@@ -88,17 +84,18 @@ class CartDetailsPage(DriverCommands):
 
     @allure.step("Assert product name")
     def assert_product_name(self, product_index: int, expected_name: str) -> None:
-        assert self.get_product_name(
-            product_index) == expected_name, f"Incorrect product name, expected {expected_name} but got {self.get_product_name(product_index)}"
+        product_name = self.get_product_name(product_index)
+        assert product_name == expected_name, f"Product name is incorrect, expected {expected_name} but got {product_name}"
 
-    @allure.step("Get first product price")
+    @allure.step("Get product price based on index")
     def get_product_price(self, product_index:int) -> str:
         product_price_selector = self.SELECTORS['PRODUCT_PRICE'][self.platform]
         return self.find_child_element_in_parent_element(self.get_product(product_index), product_price_selector).text.rstrip()
 
     @allure.step("Assert product price")
     def assert_product_price(self, product_index:int, expected_price: str) -> None:
-        assert self.get_product_price(product_index) == expected_price, f"Incorrect product price, expected {expected_price} but got {self.get_product_price(product_index)}"
+        product_price = self.get_product_price(product_index)
+        assert product_price == expected_price, f"Product price is incorrect, expected {expected_price} but got {product_price}"
 
     @allure.step("Check remove button visibility")
     def check_if_remove_button_visible_on_product_item(self, product_index:int) -> None:
@@ -130,10 +127,17 @@ class CartDetailsPage(DriverCommands):
 
     @allure.step("Assert product quantity")
     def assert_product_quantity(self, product_index:int, expected_quantity: str) -> None:
-        assert self.get_product_quantity(product_index) == expected_quantity, f"Incorrect product price, expected {expected_quantity} but got {self.get_product_price(product_index)}"
+        product_quantity = self.get_product_quantity(product_index)
+        assert product_quantity == expected_quantity, f"Product quantity is incorrect, expected {expected_quantity} but got {product_quantity}"
 
-    def assert_cart_details_page(self,product_index:int, expected_name: str, expected_price: str, expected_quantity: str) -> None:
-        # self.assert_amount_of_items_in_cart(expected_amount)
+    @allure.step("Assert cart details page")
+    def assert_cart_details_page(
+            self,
+            product_index:int,
+            expected_name: str,
+            expected_price: str,
+            expected_quantity: str
+    ) -> None:
         self.assert_product_name(product_index, expected_name)
         self.assert_product_price(product_index, expected_price)
         self.assert_product_quantity(product_index, expected_quantity)

@@ -1,8 +1,6 @@
-# -*- coding: UTF-8 -*-
 import allure
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
-from typing import Literal
 from faker import Faker
 
 from utils.driver_commands import DriverCommands
@@ -33,10 +31,6 @@ class CheckoutPage(DriverCommands):
             "android": (AppiumBy.ACCESSIBILITY_ID, "test-CONTINUE"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
-        "TEST_ERROR_MESSAGE":{
-            "android": (AppiumBy.ACCESSIBILITY_ID, "test-Error message"),
-            "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
-        },
         "ERROR_MESSAGE": {
             "android": (AppiumBy.ACCESSIBILITY_ID, "test-Error message"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
@@ -54,8 +48,6 @@ class CheckoutPage(DriverCommands):
         self.platform = platform
         self.wait = WaitCommands(self.driver)
         self.swipe = Swipe(self.driver)
-        # self.faker = Faker()
-
 
     @allure.step("Wait for page loaded")
     def wait_for_page_loaded(self) -> None:
@@ -67,12 +59,10 @@ class CheckoutPage(DriverCommands):
 
     @allure.step("Insert last name")
     def insert_last_name(self, last_name_value: str = faker.last_name()) -> None:
-        # last_name_value = self.faker.last_name()
         self.type_text(self.SELECTORS['LAST_NAME_INPUT'][self.platform], last_name_value)
 
     @allure.step("Insert postal code")
     def insert_postal_code(self, postal_code_value = faker.postalcode()) -> None:
-        # postal_code_value = self.faker.postalcode()
         self.type_text(self.SELECTORS['POSTAL_CODE_INPUT'][self.platform], postal_code_value)
 
     @allure.step("Click continue button")
@@ -81,11 +71,12 @@ class CheckoutPage(DriverCommands):
         self.swipe.swipe_to_object_down(continue_button_id)
         self.click_element(continue_button_id)
 
+    @allure.step("Fill in checkout info and continue")
     def fill_in_checkout_info_and_continue(
-            self,
-            first_name_value: str = faker.first_name(),
-            last_name_value: str = faker.last_name(),
-            postal_code_value=faker.postalcode()
+        self,
+        first_name_value: str = faker.first_name(),
+        last_name_value: str = faker.last_name(),
+        postal_code_value=faker.postalcode()
     ) -> None:
         self.insert_first_name(first_name_value)
         self.insert_last_name(last_name_value)
@@ -101,8 +92,9 @@ class CheckoutPage(DriverCommands):
                                                                        error_message_text_selector)
         return self.get_text_from_element(error_message_text)
 
-    @allure.step("Validate error message field")
+    @allure.step("Validate error message")
     def validate_error_message(self, expected_error: str) -> None:
-        assert self.get_error_message() == expected_error, f"Incorrect error message, expected {expected_error} but got {self.get_error_message()}"
+        error_message = self.get_error_message()
+        assert error_message == expected_error, f"Error message is incorrect, expected {expected_error} but got {error_message}"
 
 

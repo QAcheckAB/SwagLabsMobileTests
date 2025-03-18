@@ -25,7 +25,7 @@ class ProductDetailsPage(DriverCommands):
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
         "PRODUCT_PRICE": {
-            "android": (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().description("test-Price").childSelector(new UiSelector().className("android.widget.TextView").instance(0))'),
+            "android": (AppiumBy.ACCESSIBILITY_ID, 'test-Price'),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
     }
@@ -45,15 +45,14 @@ class ProductDetailsPage(DriverCommands):
     def get_product_name(self) -> str:
          return self. get_text_from_element(self.SELECTORS['PRODUCT_TITLE'][self.platform])
 
-    @allure.step("Assert product name")
-    def assert_product_name(self, expected_name: str) -> None:
-        assert self.get_product_name() == expected_name, f"Product title is incorrect, expected {expected_name} should be found in  {self.get_product_name()}"
+    @allure.step("Add to cart")
+    def add_to_cart(self) -> None:
+        add_to_cart_button_selector = self.SELECTORS['ADD_TO_CART_BUTTON'][self.platform]
+        self.swipe.swipe_to_object_down(add_to_cart_button_selector)
+        self.click_element(add_to_cart_button_selector)
 
     @allure.step("Get product price")
     def get_product_price(self) -> str:
-         return self. get_text_from_element(self.SELECTORS['PRODUCT_PRICE'][self.platform])
-
-    @allure.step("Assert product name")
-    def assert_product_name(self, expected_name: str) -> None:
-        assert self.get_product_price() == expected_name, f"Product price is incorrect, expected {expected_name} should be found in  {self.get_product_name()}"
-
+        product_price_selector = self.SELECTORS['PRODUCT_PRICE'][self.platform]
+        self.swipe.swipe_to_object_down(product_price_selector)
+        return self.get_text_from_element(product_price_selector)

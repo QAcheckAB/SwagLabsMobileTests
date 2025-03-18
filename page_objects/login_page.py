@@ -1,9 +1,7 @@
-# -*- coding: UTF-8 -*-
 import allure
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
 from typing import Literal
-from utils import ELEMENT
 
 from utils.driver_commands import DriverCommands
 from utils.file_manager import load_config_from_json
@@ -39,6 +37,8 @@ class LoginPage(DriverCommands):
         },
 
     }
+    UserType = Literal["standard", "locked_out", "problem"]
+    ExtendedUserType = Literal["standard", "locked_out", "problem", ""]
 
     def __init__(self, driver: WebDriver, platform: str) -> None:
         DriverCommands.__init__(self, driver)
@@ -59,7 +59,7 @@ class LoginPage(DriverCommands):
         self.click_element(login_button_id)
 
     @allure.step("Select_user_type")
-    def select_user_type(self, user:Literal["standard", "locked_out", "problem"]) -> None:
+    def select_user_type(self, user: UserType) -> None:
         user_id = f"{user}_user"
         selector = (
             self.SELECTORS['USER'][self.platform][0],
@@ -73,19 +73,17 @@ class LoginPage(DriverCommands):
         return load_config_from_json("users.json")
 
     @allure.step("Insert username")
-    def insert_username(self, user:Literal["standard", "locked_out", "problem", ""]) -> None:
-        # user_data: dict = load_config_from_json("users.json")
+    def insert_username(self, user:ExtendedUserType) -> None:
         user_credential = self.get_user_data()[user]["login"] if user else ""
         self.type_text(self.SELECTORS['USERNAME'][self.platform], user_credential)
 
     @allure.step("Insert password")
-    def insert_password(self, user:Literal["standard", "locked_out", "problem", ""]) -> None:
-        # user_data: dict = load_config_from_json("users.json")
+    def insert_password(self, user:ExtendedUserType) -> None:
         password = self.get_user_data()[user]["password"] if user else ""
         self.type_text(self.SELECTORS['PASSWORD'][self.platform], password)
 
     @allure.step("Log in to the app")
-    def log_in(self, user:Literal["standard", "locked_out", "problem"]) -> None:
+    def log_in(self, user:UserType) -> None:
         user_data: dict = load_config_from_json("users.json")
         self.type_text(self.SELECTORS['USERNAME'][self.platform], user_data[user]["login"])
         self.type_text(self.SELECTORS['PASSWORD'][self.platform], user_data[user]["password"])
@@ -100,5 +98,6 @@ class LoginPage(DriverCommands):
 
     @allure.step("Validate error message field")
     def validate_error_message(self, expected_error: str) -> None:
-        assert self.get_error_message() == expected_error, f"Incorrect error message, expected {expected_error} but got {self.get_error_message()}"
+        error_message = self.get_error_message()
+        assert error_message == expected_error, f"Error message is incorrect, expected {expected_error} but got {error_message}"
 

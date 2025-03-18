@@ -13,7 +13,7 @@ class SortingItemModal(DriverCommands):
             "android": (AppiumBy.ACCESSIBILITY_ID, "Selector container"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
-        "SORTING_NAME": {
+        "SORTING_RULE": {
             "android": (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("%s")'),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
@@ -24,7 +24,7 @@ class SortingItemModal(DriverCommands):
         self.platform = platform
         self.wait = WaitCommands(self.driver)
 
-    SORTING_NAME = {
+    SORTING_RULES = {
         "name_ascending": "Name (A to Z)",
         "name_descending": "Name (Z to A)",
         "price_ascending": "Price (low to high)",
@@ -38,7 +38,7 @@ class SortingItemModal(DriverCommands):
     @allure.step("Select sorting rule")
     def select_sorting_rule(self, sorting_name: Literal["name_ascending", "name_descending", "price_ascending", "price_descending"]) -> None:
         sorting_selector = (
-            self.SELECTORS['SORTING_NAME'][self.platform][0],
-            self.SELECTORS['SORTING_NAME'][self.platform][1] % self.SORTING_NAME[sorting_name]
+            self.SELECTORS['SORTING_RULE'][self.platform][0],
+            self.SELECTORS['SORTING_RULE'][self.platform][1] % self.SORTING_RULES[sorting_name]
         )
         self.click_element(sorting_selector)

@@ -5,6 +5,7 @@ from page_objects.checkout_overview_page import CheckoutOverviewPage
 from page_objects.checkout_page import CheckoutPage
 from page_objects.dashboard_page import DashboardPage
 from page_objects.login_page import LoginPage
+from page_objects.nav_bar import NavBar
 from tests.baseTest import BaseTest, safe_run
 
 
@@ -24,12 +25,13 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
         cls.checkout_page = CheckoutPage(cls.driver, cls.PLATFORM)
         cls.checkout_overview_page = CheckoutOverviewPage(cls.driver, cls.PLATFORM)
         cls.checkout_complete_page = CheckoutCompletePage(cls.driver, cls.PLATFORM)
+        cls.nav_bar = NavBar(cls.driver, cls.PLATFORM)
         cls.login_page.wait_for_page_loaded()
         cls.login_page.select_user_type("standard")
         cls.login_page.click_login_button()
         cls.dashboard_page.wait_for_page_loaded()
         cls.dashboard_page.add_product_to_cart(0)
-        cls.dashboard_page.click_cart_button()
+        cls.nav_bar.click_cart_button()
         cls.cart_details_page.wait_for_page_loaded()
         cls.cart_details_page.click_checkout_button()
         cls.checkout_page.wait_for_page_loaded()
