@@ -10,6 +10,7 @@
   "remote": "http://localhost:4723",
   "appPackage": "com.swaglabsmobileapp",
   "appActivity": "com.swaglabsmobileapp.SplashActivity",
+  "appWaitActivity": "com.swaglabsmobileapp.MainActivity",
   "unicodeKeyboard": true,
   "resetKeyboard": true
 }
