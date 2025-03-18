@@ -6,7 +6,8 @@ from typing import Dict, Any
 
 def load_config_from_json(file_name: str) -> Dict[str, Any]:
     """
-    Loads data from json file
+    Loads data from json file.
+
     :param file_name: json file name
     :return: json data in dictionary format
     """
