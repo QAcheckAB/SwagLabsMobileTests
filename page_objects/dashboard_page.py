@@ -3,7 +3,9 @@ import allure
 from appium.webdriver import WebElement
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
-from typing import Literal, List
+from typing import Literal, List, Union
+
+from helper_methods.value_formatting import format_price_value_to_float
 from utils.driver_commands import DriverCommands
 from utils.swipe import Swipe
 from utils.wait_commands import WaitCommands
@@ -145,16 +147,9 @@ class DashboardPage(DriverCommands):
     def switch_view(self) -> None:
         self.click_element(self.SELECTORS['SWITCH_VIEW_BUTTON'][self.platform])
 
-    @allure.step("Click filter")
-    def click_filter(self) -> None:
-        self.click_element(self.SELECTORS['FILTER_BUTTON'][self.platform])
-
-    @allure.step("Select filter")
-    def select_filter(self, filter_name:) -> None:
-        self.wait.wait_for_element_visibility(self.SELECTORS['FILTER_CONTAINER'][self.platform])
-        filter_selector = (self.SELECTORS['FILTER_CONTAINER'][self.platform][0],
-                           self.SELECTORS['FILTER_NAME'][self.platform][1] % filter_name)
-        self.click_element(self.SELECTORS['FILTER_BUTTON'][self.platform])
+    @allure.step("Click sorting button")
+    def click_sorting_button(self) -> None:
+        self.click_element(self.SELECTORS['SORTING_BUTTON'][self.platform])
 
     @allure.step("Get all products names")
     def get_all_names(self) -> List[str]:
@@ -163,9 +158,16 @@ class DashboardPage(DriverCommands):
         return names
 
     @allure.step("Get all products prices")
-    def get_all_prices(self) -> List[str]:
+    def get_all_prices(self) -> List[float]:
         visible_products_prices = self.find_elements(self.SELECTORS['PRICES'][self.platform])
         prices = list(map(lambda x: x.text, visible_products_prices))
-        return prices
+        prices_as_float = list(map(lambda x: format_price_value_to_float(x), prices))
+        return prices_as_float
+
+    @allure.step("Get all products names")
+    def assert_sorting_order(self, sorting_order: Literal['asc', 'desc'], list_to_check: Union[List[str], List[float]]) -> None:
+        reverse_sorting = False if sorting_order == 'asc' else True
+        assert sorted(list_to_check, reverse=reverse_sorting) == list_to_check, f"Sorting order is not correct, expected {sorted(list_to_check, reverse=reverse_sorting)} but got {list_to_check}"
+
 
 
