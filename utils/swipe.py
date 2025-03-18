@@ -36,7 +36,8 @@ class Swipe:
         count: int = 1,
     ) -> None:
         """
-        swipes screen
+        Swipes screen.
+
         :param start_x: x-coordinate at which to start
         :param start_y: y-coordinate at which to start
         :param end_x: x-coordinate at which to stop
@@ -58,7 +59,8 @@ class Swipe:
         self, direction: Literal["down", "up", "right", "left"], **kwargs: int
     ) -> None:
         """
-        swipes the screen in the specified direction
+        Swipes the screen in the specified direction.
+
         :param direction: the direction to swipe, must be one of:
             - 'up'
             - 'down'
@@ -102,7 +104,8 @@ class Swipe:
 
     def swipe_down(self, **kwargs: int) -> None:
         """
-        swipes screen down
+        Swipes screen down.
+
         :keyword start_x: x-coordinate to start the swipe. Defaults to the center of the screen
         :keyword start_y: y-coordinate to start the swipe. Defaults to the center of the screen
         :keyword end_x: x-coordinate to stop the swipe. Defaults to the center of the screen
@@ -114,7 +117,8 @@ class Swipe:
 
     def swipe_up(self, **kwargs: int) -> None:
         """
-        swipes screen up
+        Swipes screen up.
+
         :keyword start_x: x-coordinate to start the swipe. Defaults to the center of the screen
         :keyword start_y: y-coordinate to start the swipe. Defaults to the center of the screen
         :keyword end_x: x-coordinate to stop the swipe. Defaults to the center of the screen
@@ -126,7 +130,8 @@ class Swipe:
 
     def swipe_right(self, **kwargs: int) -> None:
         """
-        swipes screen right
+        Swipes screen right.
+
         :keyword start_x: x-coordinate to start the swipe. Defaults to the center of the screen
         :keyword start_y: y-coordinate to start the swipe. Defaults to the center of the screen
         :keyword end_x: x-coordinate to stop the swipe. Defaults to the center of the screen
@@ -138,7 +143,8 @@ class Swipe:
 
     def swipe_left(self, **kwargs: int) -> None:
         """
-        swipes screen left
+        Swipes screen left.
+
         :keyword start_x: x-coordinate to start the swipe. Defaults to the center of the screen
         :keyword start_y: y-coordinate to start the swipe. Defaults to the center of the screen
         :keyword end_x: x-coordinate to stop the swipe. Defaults to the center of the screen
@@ -155,7 +161,8 @@ class Swipe:
         duration: Optional[int] = 1000,
     ) -> WebElement:
         """
-        swipes down until element is visible on the screen
+        Swipes down until element is visible on the screen.
+
         :param my_object: element to swipe to
         :param max_count_of_swipe: maximum count of swipes
         :param duration: defines the swipe speed as time taken to swipe
@@ -175,7 +182,8 @@ class Swipe:
         duration: Optional[int] = 1000,
     ) -> WebElement:
         """
-        swipes up until element is visible on the screen
+        Swipes up until element is visible on the screen.
+
         :param my_object: element to swipe to
         :param max_count_of_swipe: maximum count of swipes
         :param duration: defines the swipe speed as time taken to swipe
@@ -196,9 +204,10 @@ class Swipe:
         max_count_of_swipe: int = 10,
     ) -> WebElement:
         """
-        swipes in the specified direction until the element is visible on the screen,
+        Swipes in the specified direction until the element is visible on the screen,
         this method performs repeated swipes in the given direction until the specified
-        element becomes visible or the maximum number of swipes is reached
+        element becomes visible or the maximum number of swipes is reached.
+
         :param direction: the direction to swipe, must be one of:
             - 'up'
             - 'down'
