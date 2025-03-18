@@ -1,9 +1,9 @@
 import os
+from typing import Literal
 
 import allure
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webdriver import WebDriver
-from typing import Literal
 
 from utils.driver_commands import DriverCommands
 from utils.file_manager import load_config_from_json
@@ -18,7 +18,7 @@ class LoginPage(DriverCommands):
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
         "USER": {
-            "android": (AppiumBy.ANDROID_UIAUTOMATOR, "new UiSelector().text(\"%s\")"),
+            "android": (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("%s")'),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
         "USERNAME": {
@@ -34,10 +34,12 @@ class LoginPage(DriverCommands):
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
         "ERROR_MESSAGE_TEXT": {
-            "android": (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.TextView")'),
+            "android": (
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                'new UiSelector().className("android.widget.TextView")',
+            ),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
-
     }
     UserType = Literal["standard", "locked_out", "problem"]
     ExtendedUserType = Literal["standard", "locked_out", "problem", ""]
@@ -51,12 +53,12 @@ class LoginPage(DriverCommands):
 
     @allure.step("Wait for page loaded")
     def wait_for_page_loaded(self) -> None:
-        self.wait.wait_for_element_visibility(self.SELECTORS['USERNAME'][self.platform])
-        self.wait.wait_for_element_visibility(self.SELECTORS['PASSWORD'][self.platform])
+        self.wait.wait_for_element_visibility(self.SELECTORS["USERNAME"][self.platform])
+        self.wait.wait_for_element_visibility(self.SELECTORS["PASSWORD"][self.platform])
 
     @allure.step("Click login button")
     def click_login_button(self) -> None:
-        login_button_id = self.SELECTORS['LOGIN_BUTTON'][self.platform]
+        login_button_id = self.SELECTORS["LOGIN_BUTTON"][self.platform]
         self.swipe.swipe_to_object_up(login_button_id)
         self.click_element(login_button_id)
 
@@ -64,8 +66,8 @@ class LoginPage(DriverCommands):
     def select_user_type(self, user: UserType) -> None:
         user_id = f"{user}_user"
         selector = (
-            self.SELECTORS['USER'][self.platform][0],
-            self.SELECTORS['USER'][self.platform][1] % user_id
+            self.SELECTORS["USER"][self.platform][0],
+            self.SELECTORS["USER"][self.platform][1] % user_id,
         )
         self.swipe.swipe_to_object_down(selector)
         self.click_element(selector)
@@ -75,31 +77,39 @@ class LoginPage(DriverCommands):
         return load_config_from_json("users.json")
 
     @allure.step("Insert username")
-    def insert_username(self, user:ExtendedUserType) -> None:
+    def insert_username(self, user: ExtendedUserType) -> None:
         user_credential = self.get_user_data()[user]["login"] if user else ""
-        self.type_text(self.SELECTORS['USERNAME'][self.platform], user_credential)
+        self.type_text(self.SELECTORS["USERNAME"][self.platform], user_credential)
 
     @allure.step("Insert password")
-    def insert_password(self, user:ExtendedUserType) -> None:
+    def insert_password(self, user: ExtendedUserType) -> None:
         password = self.get_user_data()[user]["password"] if user else ""
-        self.type_text(self.SELECTORS['PASSWORD'][self.platform], password)
+        self.type_text(self.SELECTORS["PASSWORD"][self.platform], password)
 
     @allure.step("Log in to the app")
-    def log_in(self, user:UserType) -> None:
+    def log_in(self, user: UserType) -> None:
         user_data: dict = load_config_from_json("users.json")
-        self.type_text(self.SELECTORS['USERNAME'][self.platform], user_data[user]["login"])
-        self.type_text(self.SELECTORS['PASSWORD'][self.platform], (os.getenv("PASSWORD", user_data[user]["password"])))
-        self.click_element( self.SELECTORS['LOGIN_BUTTON'][self.platform])
+        self.type_text(self.SELECTORS["USERNAME"][self.platform], user_data[user]["login"])
+        self.type_text(
+            self.SELECTORS["PASSWORD"][self.platform],
+            (os.getenv("PASSWORD", user_data[user]["password"])),
+        )
+        self.click_element(self.SELECTORS["LOGIN_BUTTON"][self.platform])
 
     @allure.step("Get error message")
     def get_error_message(self) -> str:
-        error_message = self.wait.wait_for_element_visibility(self.SELECTORS['ERROR_MESSAGE'][self.platform])
-        error_message_text_selector = self.SELECTORS['ERROR_MESSAGE_TEXT'][self.platform]
-        error_message_text = self.find_child_element_in_parent_element(error_message, error_message_text_selector)
+        error_message = self.wait.wait_for_element_visibility(
+            self.SELECTORS["ERROR_MESSAGE"][self.platform]
+        )
+        error_message_text_selector = self.SELECTORS["ERROR_MESSAGE_TEXT"][self.platform]
+        error_message_text = self.find_child_element_in_parent_element(
+            error_message, error_message_text_selector
+        )
         return self.get_text_from_element(error_message_text)
 
     @allure.step("Validate error message field")
     def validate_error_message(self, expected_error: str) -> None:
         error_message = self.get_error_message()
-        assert error_message == expected_error, f"Error message is incorrect, expected {expected_error} but got {error_message}"
-
+        assert (
+            error_message == expected_error
+        ), f"Error message is incorrect, expected {expected_error} but got {error_message}"

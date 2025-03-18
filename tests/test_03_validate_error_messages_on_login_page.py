@@ -1,4 +1,5 @@
 import allure
+
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
@@ -45,8 +46,3 @@ class ValidateErrorsOnLoginPageTests(BaseTest):
         self.login_page.insert_password("")
         self.login_page.click_login_button()
         self.login_page.validate_error_message(self.PASSWORD_ERROR_MESSAGE)
-
-
-
-
-

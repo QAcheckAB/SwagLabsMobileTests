@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Union, Tuple
+
+from typing import Tuple, Union
 
 from appium.webdriver.webelement import WebElement
 

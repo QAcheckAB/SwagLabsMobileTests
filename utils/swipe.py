@@ -4,9 +4,8 @@ from typing import Literal, Optional
 
 from appium.webdriver.webdriver import WebDriver
 from appium.webdriver.webelement import WebElement
-from selenium.common import NoSuchElementException
-from utils import ELEMENT
 
+from utils import ELEMENT
 from utils.driver_commands import DriverCommands
 
 

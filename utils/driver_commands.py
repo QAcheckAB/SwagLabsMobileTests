@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 import logging as log
-from typing import Tuple, Dict, Optional, Union, List
+from typing import List, Optional, Tuple, Union
 
+from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.webelement import WebElement
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from appium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
 
 from utils import ELEMENT, is_webelement
 from utils.wait_commands import WaitCommands
@@ -17,7 +16,6 @@ class DriverCommands:
     def __init__(self, driver: webdriver) -> None:
         self.driver: webdriver = driver
         self.wait = WaitCommands(self.driver)
-
 
     def find_element(self, selector: ELEMENT, wait: Optional[float] = None) -> WebElement:
         """
@@ -50,7 +48,7 @@ class DriverCommands:
         """
         Find the specified element and click on it.
 
-        :param element: The element to be clicked. It can be a tuple (e.g., (By.ID, 'element/id')) or a WebElement.
+        :param element: The element to be clicked. It can be a tuple (e.g., (By.ID, 'element/id')) or a WebElement.  # noqa E501
         :type element: ELEMENT
         :return: None
         """
@@ -91,16 +89,17 @@ class DriverCommands:
         :param expected_text: text to compare with text from element
         """
         element_text = self.get_text_from_element(element)
-        assert (
-            element_text == expected_text
-        ),   "Wrong text. Should be '%s' instead of '%s'" % (expected_text, element_text)
-        log.info(f'Text: {expected_text} is correct!')
+        assert element_text == expected_text, "Wrong text. Should be '%s' instead of '%s'" % (
+            expected_text,
+            element_text,
+        )
+        log.info(f"Text: {expected_text} is correct!")
 
     def find_child_element_in_parent_element(
-            self,
-            parent: ELEMENT,
-            child: Tuple[str, str],
-            wait: Optional[float] = None,
+        self,
+        parent: ELEMENT,
+        child: Tuple[str, str],
+        wait: Optional[float] = None,
     ) -> WebElement:
         """
         Finds child element in the parent WebElement.
@@ -118,7 +117,8 @@ class DriverCommands:
         log.info(f"Found child element by selector: {child}. {self.__get_text_or_id(element)}")
         return element
 
-    def find_all_child_elements_in_parent_element(self, parent: ELEMENT, child: Tuple[str, str]
+    def find_all_child_elements_in_parent_element(
+        self, parent: ELEMENT, child: Tuple[str, str]
     ) -> List[WebElement]:
         """
         Finds all child elements located in the parent WebElement.

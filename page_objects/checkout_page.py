@@ -12,9 +12,9 @@ class CheckoutPage(DriverCommands):
     faker = Faker()
     SELECTORS = {
         "CHECKOUT_CONTENT": {
-        "android": (AppiumBy.ACCESSIBILITY_ID, "test-Checkout: Your Info"),
-        "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
-    },
+            "android": (AppiumBy.ACCESSIBILITY_ID, "test-Checkout: Your Info"),
+            "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
+        },
         "FIRST_NAME_INPUT": {
             "android": (AppiumBy.ACCESSIBILITY_ID, "test-First Name"),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
@@ -37,7 +37,9 @@ class CheckoutPage(DriverCommands):
         },
         "ERROR_MESSAGE_TEXT": {
             "android": (
-            AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.TextView")'),
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                'new UiSelector().className("android.widget.TextView")',
+            ),
             "ios": (AppiumBy.ACCESSIBILITY_ID, ""),
         },
     }
@@ -51,23 +53,23 @@ class CheckoutPage(DriverCommands):
 
     @allure.step("Wait for page loaded")
     def wait_for_page_loaded(self) -> None:
-        self.wait.wait_for_element_visibility(self.SELECTORS['CHECKOUT_CONTENT'][self.platform])
+        self.wait.wait_for_element_visibility(self.SELECTORS["CHECKOUT_CONTENT"][self.platform])
 
     @allure.step("Insert first name")
-    def insert_first_name(self,first_name_value: str = faker.first_name()) -> None:
-        self.type_text(self.SELECTORS['FIRST_NAME_INPUT'][self.platform], first_name_value)
+    def insert_first_name(self, first_name_value: str = faker.first_name()) -> None:
+        self.type_text(self.SELECTORS["FIRST_NAME_INPUT"][self.platform], first_name_value)
 
     @allure.step("Insert last name")
     def insert_last_name(self, last_name_value: str = faker.last_name()) -> None:
-        self.type_text(self.SELECTORS['LAST_NAME_INPUT'][self.platform], last_name_value)
+        self.type_text(self.SELECTORS["LAST_NAME_INPUT"][self.platform], last_name_value)
 
     @allure.step("Insert postal code")
-    def insert_postal_code(self, postal_code_value = faker.postalcode()) -> None:
-        self.type_text(self.SELECTORS['POSTAL_CODE_INPUT'][self.platform], postal_code_value)
+    def insert_postal_code(self, postal_code_value=faker.postalcode()) -> None:
+        self.type_text(self.SELECTORS["POSTAL_CODE_INPUT"][self.platform], postal_code_value)
 
     @allure.step("Click continue button")
     def click_continue_button(self) -> None:
-        continue_button_id = self.SELECTORS['CONTINUE_BUTTON'][self.platform]
+        continue_button_id = self.SELECTORS["CONTINUE_BUTTON"][self.platform]
         self.swipe.swipe_to_object_down(continue_button_id)
         self.click_element(continue_button_id)
 
@@ -76,7 +78,7 @@ class CheckoutPage(DriverCommands):
         self,
         first_name_value: str = faker.first_name(),
         last_name_value: str = faker.last_name(),
-        postal_code_value=faker.postalcode()
+        postal_code_value=faker.postalcode(),
     ) -> None:
         self.insert_first_name(first_name_value)
         self.insert_last_name(last_name_value)
@@ -86,15 +88,17 @@ class CheckoutPage(DriverCommands):
     @allure.step("Get error message")
     def get_error_message(self) -> str:
         error_message = self.wait.wait_for_element_visibility(
-            self.SELECTORS['ERROR_MESSAGE'][self.platform])
-        error_message_text_selector = self.SELECTORS['ERROR_MESSAGE_TEXT'][self.platform]
-        error_message_text = self.find_child_element_in_parent_element(error_message,
-                                                                       error_message_text_selector)
+            self.SELECTORS["ERROR_MESSAGE"][self.platform]
+        )
+        error_message_text_selector = self.SELECTORS["ERROR_MESSAGE_TEXT"][self.platform]
+        error_message_text = self.find_child_element_in_parent_element(
+            error_message, error_message_text_selector
+        )
         return self.get_text_from_element(error_message_text)
 
     @allure.step("Validate error message")
     def validate_error_message(self, expected_error: str) -> None:
         error_message = self.get_error_message()
-        assert error_message == expected_error, f"Error message is incorrect, expected {expected_error} but got {error_message}"
-
-
+        assert (
+            error_message == expected_error
+        ), f"Error message is incorrect, expected {expected_error} but got {error_message}"

@@ -1,5 +1,10 @@
 import allure
-from helper_methods.value_formatting import format_price_value_to_float, round_value_to_two_decimal_places, format_value_to_two_decimal_places
+
+from helper_methods.value_formatting import (
+    format_price_value_to_float,
+    format_value_to_two_decimal_places,
+    round_value_to_two_decimal_places,
+)
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
@@ -29,7 +34,9 @@ class MakingOrderFromProductDetailsTests(BaseTest):
     def setUp(self):
         BaseTest().setUp()
 
-    @allure.title("test 01 - Making order - adding product from product details to cart - happy path")
+    @allure.title(
+        "test 01 - Making order - adding product from product details to cart - happy path"
+    )
     def test_01_adding_product_from_product_details_to_cart_and_making_order_happy_path(self):
         products_amount = 1
         product_quantity = "1"
@@ -40,14 +47,16 @@ class MakingOrderFromProductDetailsTests(BaseTest):
         self.dashboard_page.open_products_details(1)
         self.product_details_page.wait_for_page_loaded()
 
-        product_name= self.product_details_page.get_product_name()
+        product_name = self.product_details_page.get_product_name()
         product_price = self.product_details_page.get_product_price()
         tax_value = round_value_to_two_decimal_places(
             format_price_value_to_float(product_price) * percentage
         )
         tax_value_proper_format = str(format_value_to_two_decimal_places(tax_value))
-        total_price = str(round_value_to_two_decimal_places(
-            format_price_value_to_float(product_price) + float(tax_value))
+        total_price = str(
+            round_value_to_two_decimal_places(
+                format_price_value_to_float(product_price) + float(tax_value)
+            )
         )
         self.product_details_page.add_to_cart()
         self.nav_bar.check_cart_button_label(f"{products_amount}")
@@ -55,10 +64,7 @@ class MakingOrderFromProductDetailsTests(BaseTest):
         self.cart_details_page.wait_for_page_loaded()
         self.cart_details_page.assert_amount_of_products_in_cart(products_amount)
         self.cart_details_page.assert_cart_details_page(
-            0,
-            product_name,
-            product_price,
-            product_quantity
+            0, product_name, product_price, product_quantity
         )
         self.cart_details_page.click_checkout_button()
         self.checkout_page.wait_for_page_loaded()
@@ -71,12 +77,7 @@ class MakingOrderFromProductDetailsTests(BaseTest):
             product_price,
             product_quantity,
             tax_value_proper_format,
-            total_price
+            total_price,
         )
         self.checkout_overview_page.click_finish_button()
         self.checkout_complete_page.wait_for_page_loaded()
-
-
-
-
-

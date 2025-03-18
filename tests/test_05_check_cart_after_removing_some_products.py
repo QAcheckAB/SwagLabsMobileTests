@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-import random
-from typing import re
-
 import allure
 
-from helper_methods.value_formatting import format_price_value_to_float, \
-    format_value_to_two_decimal_places, round_value_to_two_decimal_places
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
@@ -45,8 +39,8 @@ class CheckCartAfterChangesTests(BaseTest):
         self.dashboard_page.wait_for_page_loaded()
         self.dashboard_page.switch_view()
 
-        first_product_name= self.dashboard_page.get_product_name(0)
-        second_product_name= self.dashboard_page.get_product_name(1)
+        first_product_name = self.dashboard_page.get_product_name(0)
+        second_product_name = self.dashboard_page.get_product_name(1)
         second_product_price = self.dashboard_page.get_product_price(1)
 
         self.dashboard_page.add_product_to_cart(0)
@@ -60,22 +54,18 @@ class CheckCartAfterChangesTests(BaseTest):
         self.nav_bar.check_cart_button_label(f"{product_amount_after_first_removal}")
         self.nav_bar.click_cart_button()
         self.cart_details_page.wait_for_page_loaded()
-        self.cart_details_page.assert_amount_of_products_in_cart(product_amount_after_first_removal)
+        self.cart_details_page.assert_amount_of_products_in_cart(
+            product_amount_after_first_removal
+        )
         self.cart_details_page.assert_product_name(0, first_product_name)
         self.cart_details_page.assert_product_quantity(0, product_quantity)
         self.cart_details_page.assert_product_name(1, second_product_name)
         self.cart_details_page.assert_product_quantity(1, product_quantity)
         self.cart_details_page.remove_product_from_cart(0)
         self.nav_bar.check_cart_button_label(f"{product_amount_after_second_removal}")
-        self.cart_details_page.assert_amount_of_products_in_cart(product_amount_after_second_removal)
-        self.cart_details_page.assert_cart_details_page(
-            0,
-            second_product_name,
-            second_product_price,
-            product_quantity
+        self.cart_details_page.assert_amount_of_products_in_cart(
+            product_amount_after_second_removal
         )
-
-
-
-
-
+        self.cart_details_page.assert_cart_details_page(
+            0, second_product_name, second_product_price, product_quantity
+        )

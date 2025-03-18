@@ -1,4 +1,5 @@
 import allure
+
 from page_objects.cart_details_page import CartDetailsPage
 from page_objects.checkout_complete_page import CheckoutCompletePage
 from page_objects.checkout_overview_page import CheckoutOverviewPage
@@ -13,7 +14,6 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
     FIRST_NAME_ERROR_MESSAGE = "First Name is required"
     LAST_NAME_ERROR_MESSAGE = "Last Name is required"
     POSTAL_CODE_ERROR_MESSAGE = "Postal Code is required"
-
 
     @classmethod
     @safe_run
@@ -36,7 +36,6 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
         cls.cart_details_page.click_checkout_button()
         cls.checkout_page.wait_for_page_loaded()
 
-
     def setUp(self):
         BaseTest().setUp()
 
@@ -48,8 +47,7 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
     @allure.title("test 02 - Try to checkout only with first name")
     def test_02_checkout_only_with_first_name(self):
         self.checkout_page.fill_in_checkout_info_and_continue(
-            last_name_value="",
-            postal_code_value=""
+            last_name_value="", postal_code_value=""
         )
         self.checkout_page.validate_error_message(self.LAST_NAME_ERROR_MESSAGE)
 
@@ -66,8 +64,7 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
     @allure.title("test 05 - Try to checkout only with last name")
     def test_05_checkout_only_with_last_name(self):
         self.checkout_page.fill_in_checkout_info_and_continue(
-            first_name_value="",
-            postal_code_value=""
+            first_name_value="", postal_code_value=""
         )
         self.checkout_page.validate_error_message(self.FIRST_NAME_ERROR_MESSAGE)
 
@@ -79,11 +76,6 @@ class ValidateErrorsOnCheckoutPageTests(BaseTest):
     @allure.title("test 07 - Try to checkout only with postal code")
     def test_07_checkout_only_with_postal_codee(self):
         self.checkout_page.fill_in_checkout_info_and_continue(
-            first_name_value="",
-            last_name_value=""
+            first_name_value="", last_name_value=""
         )
         self.checkout_page.validate_error_message(self.FIRST_NAME_ERROR_MESSAGE)
-
-
-
-
